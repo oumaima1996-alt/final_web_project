@@ -1,0 +1,48 @@
+.banner {
+    /* 1. Set a background image */
+    background-image:linear-gradient(-225deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 50%), url(../../images/background.jpg);   
+    /* 2. Make the background image cover the banner div */
+      background-size: cover;     
+    /* 3. Center the image */
+      background-position: center;
+    padding: 100px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .banner h1 {
+    color: white;
+    font-size: 50px;
+  }
+  .banner h2 {
+    color: white;
+    font-size: 30px;
+    font-weight: lighter;
+      opacity: 0.8;
+  }
+
+
+  .btn-blue {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    width: 220px;
+    height: 60px;
+  
+    background-color: var(--light-theme);
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--color);
+    transition: all 0.3s;
+    position: relative;
+  
+    text-align: center;
+    overflow: hidden;
+  
+    border-radius: 5px;
+    box-shadow: 0 6px 30px -10px rgba(#cccccc, 1);
+  
+  }
+
+
