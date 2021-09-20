@@ -3,14 +3,15 @@ import {LOGIN_USER ,
     GET_AUTH_USER,
     REGISTER_USER ,
     AUTH_ERROR,
-    SET_LOADING} from "../action/actionTypes"
+    SET_LOADING, GET_USER} from "../action/actionTypes"
 
     const initialState ={
         token : localStorage.getItem("token") ,
         user : null , 
         isAuth : false ,
         isLoading : false ,
-        msg : null
+        msg : null, 
+        users :[]
     }
 
     export default function (state = initialState , {type , payload}) {
@@ -27,6 +28,8 @@ import {LOGIN_USER ,
                     case SET_LOADING :
                         return {...state , isLoading : true 
                         }
+                    case GET_USER :
+                        return {...state,  users : payload}
 
                         case LOGOUT :
                             localStorage.removeItem("token")

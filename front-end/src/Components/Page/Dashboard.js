@@ -2,11 +2,11 @@ import React, {useState} from 'react'
 import NavBar from '../NavBar'
 import Modal from './Modal'
 import AddProduct from '../AddProduct'
-import ProductList from '../ProductList'
-
+import ProductListD from '../ProductListD'
+import {Link} from "react-router-dom"
 import {Row, Container, Col} from "react-bootstrap"
 import '../../App.css'
-import {initialData} from '../InitialData';
+import { useSelector } from 'react-redux'
 import {
     CDBSidebar,
     CDBSidebarContent,
@@ -16,15 +16,15 @@ import {
     CDBSidebarMenuItem,
   } from 'cdbreact';
   import { NavLink } from 'react-router-dom';
-import ProductCard from '../ProductCard'
 
-function Dashboard({title, setTitle}) {
-  const [product, setProduct] = useState(initialData)
+function Dashboard({title, setTitle, products}) {
+  // const [product, setProduct] = useState(initialData)
 
-  const addMv = (e , newproduct)=> {
-    e.preventDefault() ;
-    return setProduct([...product, newproduct]) 
-  }
+  // const addMv = (e , newproduct)=> {
+  //   e.preventDefault() ;
+  //   return setProduct([...product, newproduct]) 
+  // }
+  const user = useSelector(state => state.authReducer.user)
 
   
     
@@ -32,6 +32,7 @@ function Dashboard({title, setTitle}) {
         <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}
         
       >
+      
         <CDBSidebar textColor="#fff" backgroundColor="#333">
           <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
             <a
@@ -45,20 +46,21 @@ function Dashboard({title, setTitle}) {
   
           <CDBSidebarContent className="sidebar-content">
             <CDBSidebarMenu>
-              <NavLink exact to="/category" activeClassName="activeClicked">
-                <CDBSidebarMenuItem icon="columns">Category</CDBSidebarMenuItem>
+              <NavLink exact to="/" activeClassName="activeClicked">
+                <CDBSidebarMenuItem icon="columns">Home</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/products" activeClassName="activeClicked">
+              <NavLink exact to="/product" activeClassName="activeClicked">
                 <CDBSidebarMenuItem icon="table">Product</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/profile" activeClassName="activeClicked">
+
+              <NavLink  to="/person" activeClassName="activeClicked">
                 <CDBSidebarMenuItem icon="user">Profile page</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink exact to="/analytics" activeClassName="activeClicked">
+              {/* <NavLink exact to="/analytics" activeClassName="activeClicked">
                 <CDBSidebarMenuItem icon="chart-line">
                   Analytics
                 </CDBSidebarMenuItem>
-              </NavLink>
+              </NavLink> */}
   
               <NavLink
                 exact
@@ -84,10 +86,17 @@ function Dashboard({title, setTitle}) {
           </CDBSidebarFooter>
         </CDBSidebar>
 
-        <AddProduct addMv={addMv}/>
+        {/* <AddProduct /> */}
+        {/* <div className="App"> */}
+      {/* <Link to ="/contact-list">
+    <button> Contact list </button>
+    </Link> */}
+    {/* <Link to ="/add-product">
+    <button> add Product</button>
+    </Link> */}
        
-       <ProductList product = {product}  title = {title} setTitle={setTitle}/>
-       
+       <ProductListD   title = {title} products = {products} user = {user}/>
+
       </div>
         
            

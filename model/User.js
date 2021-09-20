@@ -3,25 +3,25 @@ const Schema = mongoose.Schema
 const userSchema = new Schema({
     name : {
         type:String,
-        required: true,
-        trim : true, 
-        min:3, 
-        max:30
+        required: true
+         
+        // min:3, 
+        // max:30
     },
     lastname : {
-        type:String,
-        required:true, 
-        trim:true, 
-        min : 3, 
-        max:30},
-        username : {
-            type:String,
+        type:String
+        
+        
+        // min : 3, 
+         },
+        // username : {
+        //     type:String,
             
-            trim:true, 
-            unique:true, 
-            index:true,
-            lowercase:true
-        }, 
+             
+        //     unique:true, 
+        //     index:true,
+        //     lowercase:true
+        // }, 
     email : {
         type:String,
         required:true
@@ -29,14 +29,18 @@ const userSchema = new Schema({
      password:{
          type:String,
          required:true  
-     }, 
+     },
      role:{
          type:String, 
          num : ['user', "admin"], 
          default : "user"
      },
      phoneNumber : {type:String}, 
-     profilePicture : {type:String}
+     profilePicture : {type:String},
+     products : [
+        { type:Schema.Types.ObjectId, 
+         ref:"product"},
+     ],
      
 
     

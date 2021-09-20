@@ -1,15 +1,27 @@
 
-import React, { Fragment } from "react";
+import React, {useState, Fragment } from "react";
 import { Navbar, NavbarBrand, Nav, NavItem, Button } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { logout} from "../redux/action/authAction";
 import Signin from "../Components/Signin";
 import Signup from "../Components/Signup";
+import Search from "../Components/Search";
+import NavBarAd from "../Components/NavBarAd";
+import AdminPage from './AdminPage';
 
-const NavBar = ({setTitle}) => {
+const NavBar = ({title, setTitle, user}) => {
   const dispatch = useDispatch();
+  // const [title,setTitle] = useState("")
+  console.log('title', title)
   const isAuth = useSelector((state) => state.authReducer.isAuth);
+  var userArray = user && Object.keys(user)
+
+  const history = useHistory();
+  const onSubmit = (e) => {
+      history.push({title});
+      e.preventDefault();
+  };
   return (
     <Navbar className="d-flex justify-content-between" color="dark" dark>
       <NavbarBrand
@@ -22,13 +34,13 @@ const NavBar = ({setTitle}) => {
           </Link>
         )}
       />
-      <span style={{display:"flex"}}>
-     <input type="text" placeholder="Search" 
+     
+     <input type="text" placeholder="search"  value = {title}
      onChange={(e)=>setTitle(e.target.value)}/>
-   
- </span>
+     <button className="btn-search" >Search</button>
+ 
       <Nav className="text-white">
-        {isAuth ? (
+        { userArray && userArray.includes('isAdmin') ? (<AdminPage />):isAuth ? (
           <Fragment>
             <NavItem className="p-2">
               <Button onClick={() => dispatch(logout())} color="light">
@@ -37,12 +49,13 @@ const NavBar = ({setTitle}) => {
             </NavItem>
             <NavItem className="p-2">
               <Button color="light">
-                <Link to="/profile">Profile</Link>
+                <Link to="/dashboard">Dashboard</Link>
               </Button>
             </NavItem>
           </Fragment>
         ) : (
           <Fragment>
+             
             <NavItem className="p-2">
               <Signin/>
             </NavItem>

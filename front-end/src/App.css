@@ -6,6 +6,11 @@ body {
     margin-right: 0px;    
 }
 
+.App{
+    background-color: #f8f8f8;
+    margin-bottom: 0px;
+  }
+
 .sidebar {
     position : fix; 
     top:0;
@@ -13,3 +18,24 @@ body {
     bottom:0; 
     background-color:darkslategray;
 }
+
+.btn-pro {
+    background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(230, 225, 225);
+    color: rgb(17, 17, 17);
+    text-align: center;
+ }

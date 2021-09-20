@@ -10,16 +10,17 @@ import {combineReducers} from "redux"
 import authReducer from "./authReducer"
 
 import categoryReducer from "./categoryReducer"
-import itemReducer from './itemReducer';
+import {itemReducer} from './itemReducer';
 import errorReducer from './errorReducer';
 import cartReducer from './cartReducer';
 import orderReducer from './orderReducer';
+import {profileReducer} from './profileReducer';
 
 export default  combineReducers({
     authReducer, 
-    item: itemReducer,
+   itemReducer,
     error: errorReducer,
-    cart: cartReducer
-    
+    cart: cartReducer,
+    profileReducer
    
 })

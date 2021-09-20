@@ -1,73 +1,127 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import Reducer from '../redux/reducer/reducer'
-import {NavLink} from 'react-router-dom'
-import {addItem} from '../redux/action/itemActions'
-import {initialData} from './InitialData'
+import { NavLink, Link } from 'react-router-dom'
+import { addItem } from '../redux/action/itemActions'
+import { initialData } from './InitialData'
+import { Card, ListGroup, ListGroupItem, Carousel } from 'react-bootstrap'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { deleteProduct } from '../redux/action/itemActions'
 import "./Products.css"
-const Products = ({el}) => {
+const ProductCard = ({ product, getProduct, user }) => {
+  console.log('productcard', product)
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [fileName, setFileName] = useState([]);
 
-    
+  const [myProduct, setMyProduct] = useState([])
+
+  const dispatch = useDispatch()
+
+  const DeleteOneProduct = (idProduct, idUser) => {
+    dispatch(deleteProduct(idProduct, idUser));
+    setMyProduct(myProduct.filter((el) => el.id !== idProduct))
+  }
+  console.log("filecard", product.files)
+  return (
+
+
+
+    <div>
+      {/*          
+<Card style={{ width: '18rem' }}>
+<Carousel interval = {40000} prevLabel=""  nextLabel="">
+  {product.files.map((file,i)=>{
+
+
     return (
-        <div  className = 'product'>
-           <section class="product">
-	<div class="product__photo">
-		<div class="photo-container">
-			<div class="photo-main">
-				
-				<img src={el.url1} alt="green apple slice"/>
-			</div>
-			<div class="photo-album">
-				<ul>
-					<li><img src={el.url1} alt="green apple"/></li>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537303532/codepen/delicious-apples/half-apple.png" alt="half apple"/></li>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537303160/codepen/delicious-apples/green-apple-flipped.png" alt="green apple"/></li>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537303708/codepen/delicious-apples/apple-top.png" alt="apple top"/></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="product__info">
-		<div class="title">
-			<h1>o</h1>
-			<span>COD: 45999</span>
-		</div>
-		<div class="price">
-			R$ <span>{el.price}</span>
-		</div>
-		<div class="variant">
-			<h3>SELECT A COLOR</h3>
-			<ul>
-				<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537302064/codepen/delicious-apples/green-apple2.png" alt="green apple"/></li>
-				<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537302752/codepen/delicious-apples/yellow-apple.png" alt="yellow apple"/></li>
-				<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537302427/codepen/delicious-apples/orange-apple.png" alt="orange apple"/></li>
-				<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537302285/codepen/delicious-apples/red-apple.png" alt="red apple"/></li>
-			</ul>
-		</div>
-		<div class="description">
-			<h3>Description</h3>
-			<ul>
-				<li></li>
-				<li>Apples may be good for weight loss</li>
-				<li>Apples may be good for bone health</li>
-				<li>They're linked to a lowest risk of diabetes</li>
-			</ul>
-		</div>
-		<NavLink exact to = {"/cart"}>
-        <button class="buy--btn" >ADD TO CART</button>
+      <Carousel.Item key={i}>
+    <img
+      className="d-block w-100"
+      src={`/uploads/${file.files}`}
+      height="260px"
+      width="100%"
+      alt={file.files}
+    />
    
-
-        </NavLink>
-	</div>
-</section>
-
-<footer>
-	<p>Design from <a href="https://dribbble.com/shots/5216438-Daily-UI-012">dribbble shot</a> of <a href="https://dribbble.com/rodrigorramos">Rodrigo Ramos</a></p>
-</footer>
-            
-
-        </div>
+  </Carousel.Item>
     )
+  }
+  )}
+
+  
+    
+</Carousel>
+  <Card.Body>
+    <Card.Title>Title : {product.title}</Card.Title>
+    <Card.Text>
+      {product.description }
+    </Card.Text>
+  </Card.Body>
+  <ListGroup className="list-group-flush">
+    <ListGroupItem>Price DT : {product.price} </ListGroupItem>
+    <ListGroupItem>Category : {product.category}</ListGroupItem>
+    <ListGroupItem>Description: {product.description}</ListGroupItem>
+
+  </ListGroup>
+  <Card.Body>
+  <button>
+  <Link to={`/updateproduct/${product._id}`}> <span>edit</span> </Link> </button> 
+            <button  onClick={()=>{DeleteOneProduct(product._id, user._id);
+           
+            }}> delete </button>
+                    <NavLink to={'/cart'}><button>Add to Cart</button></NavLink>
+  </Card.Body>
+</Card> */}
+      <Card bg="dark" style={{ width: '18rem' }} className='cardStyle'>
+        <Carousel interval={40000} prevLabel="" nextLabel="">
+          {product.files.map((file, i) => {
+
+
+            return (
+              <Carousel.Item key={i}>
+                <img
+                  className="d-block w-100"
+                  src={`/uploads/${file.files}`}
+                  height="260px"
+                  width="100%"
+                  alt={file.files}
+                />
+
+              </Carousel.Item>
+            )
+          }
+          )}
+
+
+
+        </Carousel>
+        <Card.Body>
+          <Card.Title style={{ color: "burlywood" }}> Title: {product.title}</Card.Title>
+          <Card.Title style={{ color: "burlywood" }}> price en DT: {product.price}</Card.Title>
+          <Card.Title style={{ color: "burlywood" }}> Category:{product.category}</Card.Title>
+          <Card.Title style={{ color: "burlywood" }}> description: {product.description}</Card.Title>
+
+          <NavLink to={'/cart'}><button>Add to Cart</button></NavLink>
+
+        </Card.Body>
+      </Card>
+
+
+    </div>
+
+
+
+
+
+
+
+
+  )
 }
 
-export default Products
+export default ProductCard
+

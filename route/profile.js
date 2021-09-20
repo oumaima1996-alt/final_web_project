@@ -1,18 +1,19 @@
 const express = require('express')
 const router = express.Router()
 const Profile = require('../model/Profile')
+const User = require('../model/User')
+
 const {requireSignin, adminMiddleware} = require('../middleware/authRole')
 
 
 
 //add profile
 router.post('/addprofile', (req,res)=>{
-    const {fullname, aboutme,location,facebook,twitter,website,Gender,Phone} =req.body
-    const newProfile = new Profile( {
-        fullname, aboutme,
-        location,
-        facebook,twitter,
-        website,Gender,Phone
+    const {name, lastname, email, password} =req.body
+    const newProfile = new User( {
+        name,
+        lastname,
+        email, password
     })
     newProfile.save()
     .then(profile=>res.send(profile))
@@ -29,8 +30,8 @@ router.post('/addprofile', (req,res)=>{
  //edit Profile
  router.put('/updateprofile/:_id', (req,res)=>{
      const {_id} =req.params
-     const {fullname, abboutme,location,facebook,twitter,website,Gender,Phone} = req.body
-     Profile.findOneAndUpdate({_id} , {$set:{fullname, abboutme,location,facebook,twitter,website,Gender,Phone}})
+     const {name, lastname,email,password} = req.body
+     User.findOneAndUpdate({_id} , {$set:{name,lastname,email,password}})
      .then(profile =>res.send(profile))
      .catch(err=> console.log(err))
 })
@@ -38,7 +39,7 @@ router.post('/addprofile', (req,res)=>{
 //delete profile
 router.delete('/deleteprofile/:_id',   (req, res)=>{
     const {_id} = req.params
-    Profile.deleteOne({_id})
+    User.deleteOne({_id})
     .then(profile =>res.send(profile))
     .catch(error=>console.log(error))
     

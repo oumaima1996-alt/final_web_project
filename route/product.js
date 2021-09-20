@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const Product = require('../model/Products')
+const User = require('../model/User')
+
 const path = require('path');
 const multer = require('multer');
 const shortid =require('shortid')
 const slugify = require("slugify")
 const {requireSignin, adminMiddleware} = require('../middleware/authRole')
+const isAuth = require('../middleware/isAuth')
 
 const jwt = require('jsonwebtoken')
 
@@ -13,11 +16,18 @@ const jwt = require('jsonwebtoken')
 
 //Set The Storage Engine
 const storage = multer.diskStorage({
-  destination: './public/uploads/',
-  filename: function(req, file, cb){
-    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
+//   destination: './public/uploads/',
+//   filename: function(req, file, cb){
+//     cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//   }
+// });
+destination:function(req,file,cb){
+  cb(null,'./front-end/public/uploads/')
+},
+filename:function(req, file,cb){
+  cb(null, new Date().toISOString().replace(/:/g, ""))
+}
+})
 
   const upload = multer({
     storage: storage,
@@ -34,7 +44,7 @@ const storage = multer.diskStorage({
     // Allowed ext
     const filetypes = /jpeg|jpg|png|gif/;
     // Check ext
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(path.extname(file.originalname).toLocaleLowerCase());
     // Check mime
     const mimetype = filetypes.test(file.mimetype);
   
@@ -43,6 +53,18 @@ const storage = multer.diskStorage({
     } else {
       cb('Error: Images Only!');
     }
+  }
+
+  const fileSizeFormatter = (bytes, decimal)=> {
+    if(bytes ==0) {
+      return "0 Bytes"
+    }
+    const dm = decimal ||2;
+    const sizes = ["Bytes", "KB","MB", "GB", "TB", "PB", "EB", "YB", "ZB"];
+    const index = Math.floor(Math.log(bytes)/Math.log(1000));
+    return (
+      parseFloat((bytes/Math.pow(1000, index)).toFixed(dm)) + " " + sizes[index]
+    )
   }
   
 
@@ -61,23 +83,39 @@ const storage = multer.diskStorage({
 // const upload= multer({storage})
 
 //addproduct
-router.post('/addproduct',upload.array("imageProducts"),(req,res)=>{
-    const {name,price, slug,  category, imageProducts,  createdBy} =req.body
-    // let imageProducts = [];
+router.post('/addproduct/:id',upload.array("files"),(req,res)=>{
+    const {title,price,  description, category,   createdBy} =req.body
+    let filesArray = [];
+  // if (req.files.length > 0) {
+  //   files = req.files.map((file) => {
+  //     return {files : file.location};
+  //   });
+  // }
 
-    // if (req.files.length > 0) {
-    //   imageProducts = req.files.map((file) => {
-    //     return { img: file.location };
-    //   });
-    // }
-    // res.status(200).json({file:req.file, body:req.file})
+  req.files.forEach((element)=>{
+    const file = {
+      fileSize:fileSizeFormatter(element.size,2),
+      files:element.filename,
+    };
+    filesArray.push(file)
+  }
+  )
     const newProduct = new Product({
-      name ,
-      price, 
-      slug:slugify(name), 
-      imageProducts
+      title :req.body.title,
+      price :req.body.price, 
+      description :req.body.description,
+      category :req.body.category,
+      files : filesArray, 
+
+      // producPictures,
+      user:req.params.id
     });
     newProduct.save()
+    User.findOneAndUpdate(
+      {_id:req.params.id},
+      {$push: {products:newProduct._id}},
+      {new:true}
+    )
     .then(product=>res.send(product))
     .catch(error=>console.log(error))
     
@@ -92,39 +130,58 @@ router.get('/getproduct', (req,res)=>{
     })
 
 //edit product
-router.put('/updateproduct/:_id' , (req , res)=>{
-    const {_id}= req.params
-    const {name , category , stock } = req.body
-    Product.findOneAndUpdate({_id} , {$set:{name , category , stock}})
-   .then(product =>res.send(product))
-   .catch(err=> console.log(err))
-})
+router.put("/updateproduct/:id", upload.array("files"), (req ,res)=>{
+  let filesArray = [];
+  req.files.forEach((element)=>{
+    const file = {
+      fileSize:fileSizeFormatter(element.size,2),
+      files:element.filename,
+    };
+    filesArray.push(file)
+  }
+  )
+//     const {_id}= req.params
+//     const {title,price, description , category, files} = req.body
+//     Product.findOneAndUpdate({_id} , {$set:{title,price, description , category, files }})
+//    .then(product =>res.send(product))
+//    .catch(err=> console.log(err))
+// })
+Product.findById(req.params.id).then((product)=>{
+  product.title = req.body.title;
+  product.price = req.body.price;
+  product.description = req.body.description;
+  product.category = req.body.category;
+  product.files = filesArray;
 
+
+product.save()
+.then((product)=>res.send({msg:"post updated", product}))
+.catch((error)=>console.log(error))
+
+
+
+}
+)
+})
 //delete products
 
-router.delete('/deleteproduct/:_id' ,  (req , res)=>{
-    const {_id} =  req.params 
+router.delete('/deleteproduct/:idproduct/:iduser' ,  (req , res)=>{
+    const idproduct =  req.params.idproduct 
  
-    Product.deleteOne({_id})
-    .then(product =>res.send(product))
-    .catch(err=> console.log(err))
+    Product.deleteOne({_id:idproduct})
+    // .then(product =>res.send(product))
+    .catch((err)=> console.log(err))
+
+    User.findByIdAndUpdate(
+      { _id:req.params.iduser},
+      {$pull:{products:req.params.idproduct}},
+      {new:true})
+      .then((user)=> 
+      res.send({msg: "product deleted Successfully", user}))
+      .catch((error)=>console.log(error))
  
  })
  
-//  function authEditProduct(req,res,next){
-//    if(!canEditProduct(req.user = req.product)){
-//      res.status(401)
-//      return res.send('you are not allowed')
-//    }
-//    next()
-//  }
-//  function authDeleteProduct(req,res,next){
-//   if(!canDeleteProduct(req.user = req.product)){
-//     res.status(401)
-//     return res.send('you are not allowed')
-//   }
-//   next()
-//  }
 
 
 

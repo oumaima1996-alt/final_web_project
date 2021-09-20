@@ -18,7 +18,7 @@ export const GET_AUTH_USER = "GET_AUTH_USER"
 export const LOGOUT = "LOGOUT"
 export const SET_LOADING = "SET_LOADING"
 export const AUTH_ERROR = "AUTH_ERROR"
-
+export const GET_USER = "GET_USER"
 export const ADD_PRODUCT = " ADD_PRODUCT"
 export const GET_PRODUCT = " GET_PRODUCT"
 export const UPDATE_PRODUCT = " UPDTE_PRODUCT"
@@ -80,3 +80,6 @@ export const DELETE_FROM_CART = 'DELETE_FROM_CART';
 
 export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
+
+export const GET_PROFILE="GET_PROFILE"
+export const USERS_ADMIN = "USERS_ADMIN"

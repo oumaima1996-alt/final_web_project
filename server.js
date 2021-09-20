@@ -32,7 +32,7 @@ app.use("/product", productRouter)
 app.use("/profile", profileRouter)
 app.use("/comment", commentRouter)
 app.use("/card", cardRouter)
-app.use("/item", itemRouter)
+// app.use("/item", itemRouter)
 
 //port connection
 const port = process.env.PORT || 5000

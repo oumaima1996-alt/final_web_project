@@ -6,7 +6,7 @@ const PrivateRoute = ({component : Component, ...rest}) => {
     const isAuth = useSelector(state => state.authReducer.isAuth)
     if(!isAuth)
     {
-        return <Redirect to ={"/signin"} />
+        return <Redirect to ={"/"} />
     }
     return (
         <div>
