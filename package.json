@@ -7,11 +7,15 @@
   },
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server --ignore front-end",
-    "front-end": "npm start --prefix front-end",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "front-end": "cd front-end && npm run start",
+    "server-install": "npm install",
+    "front-end-install": "cd front-end && npm install",
+    "install-all": "concurrently \"npm run server-install\" \"npm run front-end-install\"",
     "dev": "concurrently \"npm run server\" \"npm run front-end\"",
     "heroku-postbuild": "cd front-end && npm install && npm run build"
+
   },
   "keywords": [],
   "author": "",
